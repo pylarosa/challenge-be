@@ -10,7 +10,7 @@ import org.esselunga.orders.entity.Order;
 import org.esselunga.orders.mapper.OrderMapper;
 import org.esselunga.orders.repository.OrderRepository;
 
-import java.text.ParseException;
+import java.util.List;
 
 @Model
 public class OrderServiceImpl implements IOrderService {
@@ -28,6 +28,16 @@ public class OrderServiceImpl implements IOrderService {
 
         } catch (MapperException | RepositoryException ex) {
             throw new ServiceException("OrderServiceImpl.insertOrder error:" + ex.getMessage());
+        }
+    }
+
+    public List<OrderDTO> getAllOrders() throws ServiceException {
+        try {
+            List<Order> orders = orderRepository.getAllOrders();
+            return orderMapper.convertEntityToDto(orders);
+
+        } catch (MapperException ex) {
+            throw new ServiceException("OrderServiceImpl.getOrder error:" + ex.getMessage());
         }
     }
 }

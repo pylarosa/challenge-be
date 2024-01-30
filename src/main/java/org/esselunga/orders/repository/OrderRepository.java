@@ -7,6 +7,8 @@ import org.esselunga.orders.entity.Order;
 import org.esselunga.utils.Constants;
 import org.esselunga.utils.mock.OrdersMockDB;
 
+import java.util.List;
+
 @ApplicationScoped
 public class OrderRepository {
 
@@ -21,5 +23,9 @@ public class OrderRepository {
         } catch (Exception ex) {
             throw new RepositoryException("OrderRepository.insertOrderMock error: " + ex.getMessage());
         }
+    }
+
+    public List<Order> getAllOrders() {
+        return mockDB.getPersistedOrders();
     }
 }

@@ -2,7 +2,6 @@ package org.esselunga.utils;
 
 import org.esselunga.exception.MapperException;
 
-import java.text.ParseException;
 import java.util.List;
 
 public interface MapperComponent<T, E> {

@@ -1,9 +1,7 @@
 package org.esselunga.orders.api;
 
 import jakarta.inject.Inject;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.esselunga.exception.ApplicationException;
@@ -18,6 +16,18 @@ public class OrderController {
 
     @Inject
     OrderServiceImpl service;
+
+    @GET
+    @Path("/getOrders")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllOrders() throws ApplicationException {
+        try {
+            return ok(service.getAllOrders()).build();
+
+        } catch (ServiceException ex) {
+            throw new ApplicationException(ex.getMessage());
+        }
+    }
 
     @POST
     @Path("/insert-order")
