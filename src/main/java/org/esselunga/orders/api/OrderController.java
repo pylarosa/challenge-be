@@ -4,10 +4,11 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.esselunga.exception.ApplicationException;
-import org.esselunga.exception.ServiceException;
 import org.esselunga.orders.dto.OrderDTO;
+import org.esselunga.orders.dto.OrderPatchDTO;
 import org.esselunga.orders.service.OrderServiceImpl;
+import org.esselunga.utils.exception.ApplicationException;
+import org.esselunga.utils.exception.ServiceException;
 
 import static jakarta.ws.rs.core.Response.ok;
 
@@ -40,4 +41,21 @@ public class OrderController {
             throw new ApplicationException(ex.getMessage());
         }
     }
+
+    @PATCH
+    @Path("/update-order/{idOrder}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response updateOrder(
+            OrderPatchDTO orderPatch,
+            @PathParam("idOrder") String idOrder) throws ApplicationException {
+        try {
+            return Response.ok(service.updateOrder(idOrder, orderPatch)).build();
+
+        } catch (Exception ex) {
+            throw new ApplicationException(ex);
+        }
+    }
+
+    // TODO getOrderById deleteOrder
 }

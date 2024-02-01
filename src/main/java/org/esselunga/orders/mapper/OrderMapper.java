@@ -2,19 +2,19 @@ package org.esselunga.orders.mapper;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import org.esselunga.exception.MapperException;
+import org.esselunga.depots.mapper.DepotMapper;
 import org.esselunga.orders.dto.OrderDTO;
 import org.esselunga.orders.entity.Order;
+import org.esselunga.products.mapper.ProductMapper;
 import org.esselunga.utils.AbstractMapperComponent;
+import org.esselunga.utils.exception.MapperException;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @ApplicationScoped
 public class OrderMapper extends AbstractMapperComponent<OrderDTO, Order> {
     @Inject
-    ArticleMapper articleMapper;
+    ProductMapper productMapper;
 
     @Inject
     DepotMapper depotMapper;
@@ -23,13 +23,15 @@ public class OrderMapper extends AbstractMapperComponent<OrderDTO, Order> {
     public OrderDTO convertEntityToDto(Order entity) throws MapperException {
         try {
             if (entity != null) {
-                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
                 return OrderDTO.builder()
-                        .id(entity.getId())
-                        .articleDTOList(articleMapper.convertEntityToDto(entity.getArticles()))
-                        .depotDTO(depotMapper.convertEntityToDto(entity.getDepot()))
+                        .orderId(entity.getId().toString())
+                        .depot(depotMapper.convertEntityToDto(entity.getDepot()))
+                        .productsDto(productMapper.convertEntityToDto(entity.getProducts()))
+                        .customer(entity.getCustomer())
+                        .address(entity.getAddress())
+                        .orderDate(entity.getOrderDate())
+                        .updateDate(entity.getUpdateDate())
                         .status(entity.getStatus())
-                        .orderDate(dateFormat.format(entity.getOrderDate()))
                         .build();
             }
             return null;
@@ -43,13 +45,15 @@ public class OrderMapper extends AbstractMapperComponent<OrderDTO, Order> {
     public Order convertDtoToEntity(OrderDTO dto) throws MapperException {
         try {
             if (dto != null) {
-                Date orderDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(dto.getOrderDate());
+                Date updateDate = new Date();
                 return Order.builder()
-                        .articles(articleMapper.convertDtoToEntity(dto.getArticleDTOList()))
-                        .depot(depotMapper.convertDtoToEntity(dto.getDepotDTO()))
+                        .depot(depotMapper.convertDtoToEntity(dto.getDepot()))
+                        .customer(dto.getCustomer())
+                        .address(dto.getAddress())
+                        .orderDate(updateDate)
+                        .updateDate(dto.getUpdated().equals(true) ? updateDate : null)
                         .status(dto.getStatus())
-                        .orderDate(orderDate)
-                        .courier(dto.getCourier())
+                        .products(productMapper.convertDtoToEntity(dto.getProductsDto()))
                         .build();
             }
             return null;

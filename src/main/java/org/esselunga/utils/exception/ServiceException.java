@@ -1,4 +1,4 @@
-package org.esselunga.exception;
+package org.esselunga.utils.exception;
 
 public class ServiceException extends Exception {
 

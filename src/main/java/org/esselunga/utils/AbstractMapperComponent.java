@@ -1,6 +1,6 @@
 package org.esselunga.utils;
 
-import org.esselunga.exception.MapperException;
+import org.esselunga.utils.exception.MapperException;
 
 import java.util.ArrayList;
 import java.util.List;

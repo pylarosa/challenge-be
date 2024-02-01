@@ -1,4 +1,4 @@
-package org.esselunga.orders.entity;
+package org.esselunga.utils.model;
 
 public enum Status {
     PRESO_IN_CARICO,

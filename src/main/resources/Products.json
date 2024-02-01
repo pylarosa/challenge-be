@@ -1,0 +1,12 @@
+[
+  { "name": "Latte", "price": 2.5 },
+  { "name": "Pane", "price": 1.0 },
+  { "name": "Uova", "price": 3.0 },
+  { "name": "Banane", "price": 1.5 },
+  { "name": "Petto di Pollo", "price": 5.0 },
+  { "name": "Spaghetti", "price": 1.2 },
+  { "name": "Pomodori", "price": 2.0 },
+  { "name": "Succo d'Arancia", "price": 3.5 },
+  { "name": "Patate", "price": 1.8 },
+  { "name": "Tavoletta di Cioccolato", "price": 2.7 }
+]

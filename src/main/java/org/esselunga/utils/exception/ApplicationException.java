@@ -1,4 +1,4 @@
-package org.esselunga.exception;
+package org.esselunga.utils.exception;
 
 public class ApplicationException extends Exception {
     public ApplicationException(final Throwable cause) {

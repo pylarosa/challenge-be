@@ -2,13 +2,16 @@ package org.esselunga.orders.service;
 
 import jakarta.enterprise.inject.Model;
 import jakarta.inject.Inject;
-import org.esselunga.exception.MapperException;
-import org.esselunga.exception.RepositoryException;
-import org.esselunga.exception.ServiceException;
+import org.bson.types.ObjectId;
 import org.esselunga.orders.dto.OrderDTO;
+import org.esselunga.orders.dto.OrderPatchDTO;
 import org.esselunga.orders.entity.Order;
 import org.esselunga.orders.mapper.OrderMapper;
 import org.esselunga.orders.repository.OrderRepository;
+import org.esselunga.utils.Constants;
+import org.esselunga.utils.exception.ServiceException;
+import org.esselunga.utils.model.Address;
+import org.esselunga.utils.model.Status;
 
 import java.util.List;
 
@@ -24,20 +27,44 @@ public class OrderServiceImpl implements IOrderService {
     public String insertOrder(OrderDTO orderDTO) throws ServiceException {
         try {
             Order order = orderMapper.convertDtoToEntity(orderDTO);
-            return orderRepository.insertOrderMock(order);
+            orderRepository.persist(order);
+            return order.getId().toString();
 
-        } catch (MapperException | RepositoryException ex) {
-            throw new ServiceException("OrderServiceImpl.insertOrder error:" + ex.getMessage());
+        } catch (Exception ex) {
+            throw new ServiceException("OrderServiceImpl.insertOrder error: " + ex.getMessage());
         }
     }
 
+    @Override
     public List<OrderDTO> getAllOrders() throws ServiceException {
         try {
-            List<Order> orders = orderRepository.getAllOrders();
+            List<Order> orders = orderRepository.listAll();
             return orderMapper.convertEntityToDto(orders);
 
-        } catch (MapperException ex) {
-            throw new ServiceException("OrderServiceImpl.getOrder error:" + ex.getMessage());
+        } catch (Exception ex) {
+            throw new ServiceException("OrderServiceImpl.getAllOrders error: " + ex.getMessage());
+        }
+    }
+
+    @Override
+    public String updateOrder(String idOrder, OrderPatchDTO orderPatch) throws ServiceException {
+        try {
+            Order order = orderRepository.findById(new ObjectId(idOrder));
+            if (orderPatch == null) {
+                return "Nessuna modifica richiesta";
+            }
+
+            Status newStatus = orderPatch.getStatus() != null ? orderPatch.getStatus() : order.getStatus();
+            Address newAddress = orderPatch.getNewAddress() != null ? orderPatch.getNewAddress() : order.getAddress();
+            Order updatedOrder = Order.builder()
+                    .status(newStatus)
+                    .address(newAddress)
+                    .build();
+            orderRepository.update(updatedOrder);
+            return Constants.ORDINE_MODIFICATO;
+
+        } catch (Exception ex) {
+            throw new ServiceException("OrderServiceImpl.updateOrder error: " + ex.getMessage());
         }
     }
 }
