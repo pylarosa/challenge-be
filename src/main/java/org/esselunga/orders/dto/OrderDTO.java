@@ -1,22 +1,23 @@
 package org.esselunga.orders.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import org.esselunga.depots.dto.DepotDTO;
+import lombok.NoArgsConstructor;
 import org.esselunga.products.dto.ProductDTO;
 import org.esselunga.utils.model.Address;
-import org.esselunga.utils.model.Status;
 
 import java.util.Date;
 import java.util.List;
 
 @Builder
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class OrderDTO {
     private String orderId;
     private List<ProductDTO> productsDto;
-    private DepotDTO depot;
-    private Status status;
+    private String status;
     private Date orderDate;
     private Date updateDate;
     private Address address;

@@ -4,8 +4,7 @@ import io.quarkus.mongodb.panache.PanacheMongoEntity;
 import io.quarkus.mongodb.panache.common.MongoEntity;
 import lombok.*;
 import org.bson.types.ObjectId;
-import org.esselunga.depots.entity.Depot;
-import org.esselunga.products.entity.Product;
+import org.esselunga.products.dto.ProductDTO;
 import org.esselunga.utils.model.Address;
 import org.esselunga.utils.model.Status;
 
@@ -20,8 +19,7 @@ import java.util.List;
 @MongoEntity(collection = "order")
 public class Order extends PanacheMongoEntity {
     private ObjectId id;
-    private List<Product> products;
-    private Depot depot;
+    private List<ProductDTO> products;
     private Status status;
     private Date orderDate;
     private Date updateDate;

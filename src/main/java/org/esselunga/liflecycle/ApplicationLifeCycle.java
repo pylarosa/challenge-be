@@ -10,6 +10,7 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
 import org.esselunga.depots.api.DepotController;
 import org.esselunga.depots.dto.DepotDTO;
+import org.esselunga.orders.api.OrderController;
 import org.esselunga.products.api.ProductController;
 import org.esselunga.products.dto.ProductDTO;
 import org.esselunga.utils.exception.ApplicationException;
@@ -30,6 +31,9 @@ public class ApplicationLifeCycle {
     @Inject
     ProductController productController;
 
+    @Inject
+    OrderController orderController;
+
     void onStart(@Observes StartupEvent event) throws ApplicationException, IOException {
         this.initDepot();
         this.initProducts();
@@ -43,12 +47,15 @@ public class ApplicationLifeCycle {
         try (Response response = productController.deleteAll()) {
             assertTrue(response.getStatus() == 200);
         }
+
+        try (Response response = orderController.deleteAll()) {
+            assertTrue(response.getStatus() == 200);
+        }
     }
 
 
     void initDepot() throws ApplicationException, IOException {
-        DepotDTO depot = readJsonFromClasspath("Depot.json", new TypeReference<DepotDTO>() {
-        });
+        DepotDTO depot = readJsonFromClasspath("Depot.json", new TypeReference<DepotDTO>() {});
         // Try-with-resources needed to prevent potential resource leaks.
         try (Response response = depotController.insertDepot(depot)) {
             assertTrue(response.getStatus() == 200);
@@ -56,7 +63,8 @@ public class ApplicationLifeCycle {
     }
 
     void initProducts() throws ApplicationException, IOException {
-        List<ProductDTO> products = (readJsonFromClasspath("Products.json", new TypeReference<List<ProductDTO>>() {}));
+        List<ProductDTO> products =
+                readJsonFromClasspath("Products.json", new TypeReference<List<ProductDTO>>() {});
 
         // Insert each product using the controller method
         for (ProductDTO product : products) {
@@ -82,7 +90,7 @@ public class ApplicationLifeCycle {
                 return objectMapper.readValue(jsonContent, typeReference);
 
             } else {
-                throw new IOException("File not found: " + "Products.json");
+                throw new IOException("File not found: " + filename);
             }
         }
     }

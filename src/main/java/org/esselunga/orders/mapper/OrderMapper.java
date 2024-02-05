@@ -1,23 +1,16 @@
 package org.esselunga.orders.mapper;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import org.esselunga.depots.mapper.DepotMapper;
 import org.esselunga.orders.dto.OrderDTO;
 import org.esselunga.orders.entity.Order;
-import org.esselunga.products.mapper.ProductMapper;
 import org.esselunga.utils.AbstractMapperComponent;
 import org.esselunga.utils.exception.MapperException;
+import org.esselunga.utils.model.Status;
 
 import java.util.Date;
 
 @ApplicationScoped
 public class OrderMapper extends AbstractMapperComponent<OrderDTO, Order> {
-    @Inject
-    ProductMapper productMapper;
-
-    @Inject
-    DepotMapper depotMapper;
 
     @Override
     public OrderDTO convertEntityToDto(Order entity) throws MapperException {
@@ -25,13 +18,12 @@ public class OrderMapper extends AbstractMapperComponent<OrderDTO, Order> {
             if (entity != null) {
                 return OrderDTO.builder()
                         .orderId(entity.getId().toString())
-                        .depot(depotMapper.convertEntityToDto(entity.getDepot()))
-                        .productsDto(productMapper.convertEntityToDto(entity.getProducts()))
+                        .productsDto(entity.getProducts())
                         .customer(entity.getCustomer())
                         .address(entity.getAddress())
                         .orderDate(entity.getOrderDate())
                         .updateDate(entity.getUpdateDate())
-                        .status(entity.getStatus())
+                        .status(entity.getStatus().getDescrizione())
                         .build();
             }
             return null;
@@ -47,13 +39,12 @@ public class OrderMapper extends AbstractMapperComponent<OrderDTO, Order> {
             if (dto != null) {
                 Date updateDate = new Date();
                 return Order.builder()
-                        .depot(depotMapper.convertDtoToEntity(dto.getDepot()))
+                        .products(dto.getProductsDto())
                         .customer(dto.getCustomer())
                         .address(dto.getAddress())
                         .orderDate(updateDate)
                         .updateDate(dto.getUpdated().equals(true) ? updateDate : null)
-                        .status(dto.getStatus())
-                        .products(productMapper.convertDtoToEntity(dto.getProductsDto()))
+                        .status(Status.fromDescrizione(dto.getStatus()))
                         .build();
             }
             return null;
