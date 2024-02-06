@@ -42,11 +42,11 @@ public class ProductController {
     }
 
     @GET
-    @Path("/getProduct/{productId}")
+    @Path("/getProduct/{orderId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getProductById(@PathParam("productId") String productId) throws ApplicationException {
+    public Response getProductByOrderId(@PathParam("orderId") String orderId) throws ApplicationException {
         try {
-            return ok(service.getProductById(productId)).build();
+            return ok(service.getProductById(orderId)).build();
 
         } catch (ServiceException ex) {
             throw new ApplicationException(ex.getMessage());

@@ -29,9 +29,10 @@ public class DepotController {
         }
     }
 
+    // ------------ Methods not used by FE -----------------
     @POST
-    @Path("/insertDepot")
     @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     public Response insertDepot(DepotDTO depotDTO) throws ApplicationException {
         try {
             return ok(service.insertDepot(depotDTO)).build();
@@ -46,7 +47,7 @@ public class DepotController {
     public Response deleteAll() throws ApplicationException {
         try {
             service.deleteAll();
-            return ok().build();
+            return ok(null).build();
 
         } catch (ServiceException ex) {
             throw new ApplicationException(ex.getMessage());

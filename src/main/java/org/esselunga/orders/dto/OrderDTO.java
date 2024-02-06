@@ -23,4 +23,5 @@ public class OrderDTO {
     private Address address;
     private String customer;
     private Boolean updated;
+    private Double total;
 }

@@ -1,6 +1,7 @@
 package org.esselunga.products.mapper;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import org.bson.types.ObjectId;
 import org.esselunga.products.dto.ProductDTO;
 import org.esselunga.products.entity.Product;
 import org.esselunga.utils.AbstractMapperComponent;
@@ -14,7 +15,7 @@ public class ProductMapper extends AbstractMapperComponent<ProductDTO, Product> 
         try {
             if (entity != null) {
                 return ProductDTO.builder()
-                        .productId(entity.getId().toString())
+                        .productId(entity.getId() != null ? entity.getId().toString() : null)
                         .name(entity.getName())
                         .quantity(entity.getQuantity())
                         .price(entity.getPrice())
@@ -32,6 +33,7 @@ public class ProductMapper extends AbstractMapperComponent<ProductDTO, Product> 
         try {
             if (dto != null) {
                 return Product.builder()
+                        .id(dto.getProductId() != null ? new ObjectId(dto.getProductId()) : null)
                         .name(dto.getName())
                         .quantity(dto.getQuantity())
                         .price(dto.getPrice())

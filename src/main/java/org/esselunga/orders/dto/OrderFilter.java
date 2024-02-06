@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.esselunga.utils.model.Status;
 
+import java.util.Date;
+
 @Builder
 @Data
 @NoArgsConstructor
@@ -13,6 +15,6 @@ import org.esselunga.utils.model.Status;
 public class OrderFilter {
     private Status status;
     private String customer;
-    private String dateBy;
-    private String dateTo;
+    private Date dateBy;
+    private Date dateTo;
 }

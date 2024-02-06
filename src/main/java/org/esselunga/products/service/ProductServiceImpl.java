@@ -3,6 +3,8 @@ package org.esselunga.products.service;
 import jakarta.enterprise.inject.Model;
 import jakarta.inject.Inject;
 import org.bson.types.ObjectId;
+import org.esselunga.orders.entity.Order;
+import org.esselunga.orders.repository.OrderRepository;
 import org.esselunga.products.dto.ProductDTO;
 import org.esselunga.products.entity.Product;
 import org.esselunga.products.mapper.ProductMapper;
@@ -18,6 +20,9 @@ public class ProductServiceImpl implements IProductService {
 
     @Inject
     ProductRepository productRepository;
+
+    @Inject
+    OrderRepository orderRepository;
 
     @Override
     public String insertProduct(ProductDTO productDTO) throws ServiceException {
@@ -43,10 +48,10 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public ProductDTO getProductById(String productId) throws ServiceException {
+    public List<ProductDTO> getProductById(String orderId) throws ServiceException {
         try {
-            Product product = productRepository.findById(new ObjectId(productId));
-            return productMapper.convertEntityToDto(product);
+            Order order = orderRepository.findById(new ObjectId(orderId));
+            return productMapper.convertEntityToDto(order.getProducts());
 
         } catch (Exception ex) {
             throw new ServiceException("ProductServiceImpl.getProductById error: " + ex.getMessage());

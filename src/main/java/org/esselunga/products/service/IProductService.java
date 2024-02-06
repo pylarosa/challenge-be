@@ -10,7 +10,7 @@ public interface IProductService {
 
     List<ProductDTO> getAllProducts() throws ServiceException;
 
-    ProductDTO getProductById(String productId) throws ServiceException;
+    List<ProductDTO> getProductById(String productId) throws ServiceException;
 
     void deleteAll() throws ServiceException;
 }

@@ -15,6 +15,7 @@ import org.mockito.MockitoAnnotations;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 class DepotControllerTest {
@@ -66,5 +67,11 @@ class DepotControllerTest {
         } catch (Exception ex) {
             assertEquals(STRING, ex.getMessage());
         }
+    }
+
+    @Test
+    void deleteAllTest() throws ApplicationException, ServiceException {
+        doNothing().when(service).deleteAll();
+        assertEquals(200, controller.deleteAll().getStatus());
     }
 }

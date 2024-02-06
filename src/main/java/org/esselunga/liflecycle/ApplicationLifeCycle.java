@@ -13,6 +13,7 @@ import org.esselunga.depots.dto.DepotDTO;
 import org.esselunga.orders.api.OrderController;
 import org.esselunga.products.api.ProductController;
 import org.esselunga.products.dto.ProductDTO;
+import org.esselunga.products.repository.ProductRepository;
 import org.esselunga.utils.exception.ApplicationException;
 
 import java.io.IOException;
@@ -34,9 +35,14 @@ public class ApplicationLifeCycle {
     @Inject
     OrderController orderController;
 
+    @Inject
+    ProductRepository productRepository;
+
     void onStart(@Observes StartupEvent event) throws ApplicationException, IOException {
-        this.initDepot();
-        this.initProducts();
+        if (productRepository.findAll().stream().toList().isEmpty()) {
+            this.initDepot();
+            this.initProducts();
+        }
     }
 
     void onStop(@Observes ShutdownEvent event) throws ApplicationException {
@@ -55,7 +61,8 @@ public class ApplicationLifeCycle {
 
 
     void initDepot() throws ApplicationException, IOException {
-        DepotDTO depot = readJsonFromClasspath("Depot.json", new TypeReference<DepotDTO>() {});
+        DepotDTO depot = readJsonFromClasspath("Depot.json", new TypeReference<DepotDTO>() {
+        });
         // Try-with-resources needed to prevent potential resource leaks.
         try (Response response = depotController.insertDepot(depot)) {
             assertTrue(response.getStatus() == 200);
@@ -64,7 +71,8 @@ public class ApplicationLifeCycle {
 
     void initProducts() throws ApplicationException, IOException {
         List<ProductDTO> products =
-                readJsonFromClasspath("Products.json", new TypeReference<List<ProductDTO>>() {});
+                readJsonFromClasspath("Products.json", new TypeReference<List<ProductDTO>>() {
+                });
 
         // Insert each product using the controller method
         for (ProductDTO product : products) {

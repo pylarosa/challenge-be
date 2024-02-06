@@ -9,11 +9,11 @@ import org.esselunga.orders.dto.OrderPatchDTO;
 import org.esselunga.orders.entity.Order;
 import org.esselunga.orders.mapper.OrderMapper;
 import org.esselunga.orders.repository.OrderRepository;
-import org.esselunga.utils.Constants;
 import org.esselunga.utils.exception.ServiceException;
 import org.esselunga.utils.model.Address;
-import org.esselunga.utils.model.Status;
+import org.esselunga.utils.order.OrderUtils;
 
+import java.util.Date;
 import java.util.List;
 
 @Model
@@ -24,9 +24,14 @@ public class OrderServiceImpl implements IOrderService {
     @Inject
     OrderRepository orderRepository;
 
+    @Inject
+    OrderUtils orderutils;
+
     @Override
     public OrderDTO insertOrder(OrderDTO orderDTO) throws ServiceException {
         try {
+            orderDTO.getProductsDto().removeIf(productDTO -> productDTO.getQuantity() == 0);
+            orderDTO.setTotal(orderutils.calculateTotalPrice(orderDTO));
             Order order = orderMapper.convertDtoToEntity(orderDTO);
             orderRepository.persist(order);
             return orderMapper.convertEntityToDto(order);
@@ -48,21 +53,23 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
-    public String updateOrder(String idOrder, OrderPatchDTO orderPatch) throws ServiceException {
+    public OrderDTO updateOrder(OrderPatchDTO orderPatch) throws ServiceException {
         try {
-            Order order = orderRepository.findById(new ObjectId(idOrder));
-            if (orderPatch == null) {
-                return "Nessuna modifica richiesta";
-            }
-
-            Status newStatus = orderPatch.getStatus() != null ? orderPatch.getStatus() : order.getStatus();
-            Address newAddress = orderPatch.getNewAddress() != null ? orderPatch.getNewAddress() : order.getAddress();
+            Order order = orderRepository.findById(new ObjectId(orderPatch.getOrderId()));
+            Address newAddress = orderPatch.getAddress() != null ? orderPatch.getAddress() : order.getAddress();
             Order updatedOrder = Order.builder()
-                    .status(newStatus)
+                    .id(order.getId())
+                    .orderDate(order.getOrderDate())
+                    .updateDate(new Date())
+                    .status(order.getStatus())
+                    .total(order.getTotal())
+                    .products(order.getProducts())
+                    .customer(order.getCustomer())
                     .address(newAddress)
+                    .updated(orderPatch.getUpdated())
                     .build();
             orderRepository.update(updatedOrder);
-            return Constants.ORDINE_MODIFICATO;
+            return orderMapper.convertEntityToDto(updatedOrder);
 
         } catch (Exception ex) {
             throw new ServiceException("OrderServiceImpl.updateOrder error: " + ex.getMessage());

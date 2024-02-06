@@ -46,14 +46,13 @@ public class OrderController {
     }
 
     @PATCH
-    @Path("/update-order/{idOrder}")
+    @Path("/update-order")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response updateOrder(
-            OrderPatchDTO orderPatch,
-            @PathParam("idOrder") String idOrder) throws ApplicationException {
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateOrder(OrderPatchDTO orderPatch) throws ApplicationException {
         try {
-            return Response.ok(service.updateOrder(idOrder, orderPatch)).build();
+            orderPatch.setUpdated(true);
+            return Response.ok(service.updateOrder(orderPatch)).build();
 
         } catch (Exception ex) {
             throw new ApplicationException(ex);

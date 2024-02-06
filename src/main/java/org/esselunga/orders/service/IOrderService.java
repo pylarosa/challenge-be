@@ -12,7 +12,7 @@ public interface IOrderService {
 
     List<OrderDTO> getAllOrders() throws ServiceException;
 
-    String updateOrder(String idOrder, OrderPatchDTO orderPatch) throws ServiceException;
+    OrderDTO updateOrder(OrderPatchDTO orderPatch) throws ServiceException;
 
     List<OrderDTO> getFilteredOrders(OrderFilter orderFilter) throws ServiceException;
 }
