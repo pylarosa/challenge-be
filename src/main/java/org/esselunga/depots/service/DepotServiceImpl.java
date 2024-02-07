@@ -2,12 +2,13 @@ package org.esselunga.depots.service;
 
 import jakarta.enterprise.inject.Model;
 import jakarta.inject.Inject;
-import org.bson.types.ObjectId;
 import org.esselunga.depots.dto.DepotDTO;
 import org.esselunga.depots.entity.Depot;
 import org.esselunga.depots.mapper.DepotMapper;
 import org.esselunga.depots.repository.DepotRepository;
 import org.esselunga.utils.exception.ServiceException;
+
+import java.util.List;
 
 @Model
 public class DepotServiceImpl implements IDepotService {
@@ -32,13 +33,13 @@ public class DepotServiceImpl implements IDepotService {
     }
 
     @Override
-    public DepotDTO getDepotById(String depotId) throws ServiceException {
+    public DepotDTO getDepot() throws ServiceException {
         try {
-            Depot depot = depotRepository.findById(new ObjectId(depotId));
-            return depotMapper.convertEntityToDto(depot);
+            List<Depot> depotList = depotRepository.findAll().stream().toList();
+            return depotMapper.convertEntityToDto(depotList.getFirst());
 
         } catch (Exception ex) {
-            throw new ServiceException("DepotServiceImpl.getDepotById error: " + ex.getMessage());
+            throw new ServiceException("DepotServiceImpl.getDepot error: " + ex.getMessage());
         }
     }
 

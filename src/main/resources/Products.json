@@ -1,11 +1,11 @@
 [
-  { "name": "Latte", "price": 2.50 },
+  { "name": "Latte", "price": 1.20 },
   { "name": "Pane", "price": 1.00 },
-  { "name": "Uova", "price": 3.00 },
+  { "name": "Uova", "price": 2.00 },
   { "name": "Banane", "price": 1.50 },
   { "name": "Petto di Pollo", "price": 5.00 },
-  { "name": "Spaghetti", "price": 1.20 },
-  { "name": "Pomodori", "price": 2.00 },
+  { "name": "Spaghetti", "price": 0.75 },
+  { "name": "Pomodori", "price": 2.35 },
   { "name": "Succo d'Arancia", "price": 3.50 },
   { "name": "Patate", "price": 1.80 },
   { "name": "Cioccolato", "price": 2.70 }

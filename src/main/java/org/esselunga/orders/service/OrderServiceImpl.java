@@ -11,6 +11,7 @@ import org.esselunga.orders.mapper.OrderMapper;
 import org.esselunga.orders.repository.OrderRepository;
 import org.esselunga.utils.exception.ServiceException;
 import org.esselunga.utils.model.Address;
+import org.esselunga.utils.model.Status;
 import org.esselunga.utils.order.OrderUtils;
 
 import java.util.Date;
@@ -57,11 +58,12 @@ public class OrderServiceImpl implements IOrderService {
         try {
             Order order = orderRepository.findById(new ObjectId(orderPatch.getOrderId()));
             Address newAddress = orderPatch.getAddress() != null ? orderPatch.getAddress() : order.getAddress();
+            Status newStatus = orderPatch.getStatus() != null ? Status.fromDescrizione(orderPatch.getStatus()) : order.getStatus();
             Order updatedOrder = Order.builder()
                     .id(order.getId())
                     .orderDate(order.getOrderDate())
                     .updateDate(new Date())
-                    .status(order.getStatus())
+                    .status(newStatus)
                     .total(order.getTotal())
                     .products(order.getProducts())
                     .customer(order.getCustomer())
@@ -76,7 +78,6 @@ public class OrderServiceImpl implements IOrderService {
         }
     }
 
-
     @Override
     public List<OrderDTO> getFilteredOrders(OrderFilter orderFilter) throws ServiceException {
         try {
@@ -84,7 +85,7 @@ public class OrderServiceImpl implements IOrderService {
             return orderMapper.convertEntityToDto(filteredOrders);
 
         } catch (Exception ex) {
-            throw new ServiceException("OrderServiceImpl.getFilteredOrders error:" + ex.getMessage());
+            throw new ServiceException("OrderServiceImpl.getFilteredOrders error: " + ex.getMessage());
         }
     }
 
@@ -93,7 +94,7 @@ public class OrderServiceImpl implements IOrderService {
             orderRepository.deleteAll();
 
         } catch (Exception ex) {
-            throw new ServiceException("OrderServiceImpl.deleteAll error:" + ex.getMessage());
+            throw new ServiceException("OrderServiceImpl.deleteAll error: " + ex.getMessage());
         }
     }
 }

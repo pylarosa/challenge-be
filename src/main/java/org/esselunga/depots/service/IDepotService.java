@@ -6,7 +6,7 @@ import org.esselunga.utils.exception.ServiceException;
 public interface IDepotService {
     String insertDepot(DepotDTO depotDTO) throws ServiceException;
 
-    DepotDTO getDepotById(String depotId) throws ServiceException;
+    DepotDTO getDepot() throws ServiceException;
 
     void deleteAll() throws ServiceException;
 }

@@ -18,11 +18,11 @@ public class DepotController {
     DepotServiceImpl service;
 
     @GET
-    @Path("/getDepot/{depotId}")
+    @Path("/getDepot")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getDepotById(@PathParam("depotId") String depotId) throws ApplicationException {
+    public Response getDepot() throws ApplicationException {
         try {
-            return ok(service.getDepotById(depotId)).build();
+            return ok(service.getDepot()).build();
 
         } catch (ServiceException ex) {
             throw new ApplicationException(ex.getMessage());

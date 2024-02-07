@@ -14,9 +14,7 @@ import org.mockito.MockitoAnnotations;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class DepotControllerTest {
     private static final String STRING = "string";
@@ -53,15 +51,15 @@ class DepotControllerTest {
     @Test
     void getDepotByIdTest() throws ServiceException, ApplicationException {
         DepotDTO expectedResponse = new DepotDTO();
-        when(service.getDepotById(anyString())).thenReturn(expectedResponse);
-        Response actualResponse = controller.getDepotById(STRING);
+        when(service.getDepot()).thenReturn(expectedResponse);
+        Response actualResponse = controller.getDepot();
         assertEquals(expectedResponse, actualResponse.getEntity());
 
         // Exception Branch
-        when(service.getDepotById(anyString())).thenThrow(new ServiceException(STRING));
+        when(service.getDepot()).thenThrow(new ServiceException(STRING));
 
         try {
-            controller.getDepotById(STRING);
+            controller.getDepot();
             fail();
 
         } catch (Exception ex) {
@@ -73,5 +71,16 @@ class DepotControllerTest {
     void deleteAllTest() throws ApplicationException, ServiceException {
         doNothing().when(service).deleteAll();
         assertEquals(200, controller.deleteAll().getStatus());
+
+        // Exception Branch
+        doThrow(new ServiceException(STRING)).when(service).deleteAll();
+
+        try {
+            controller.deleteAll();
+            fail();
+
+        } catch (Exception ex) {
+            assertEquals(STRING, ex.getMessage());
+        }
     }
 }

@@ -55,7 +55,7 @@ public class OrderController {
             return Response.ok(service.updateOrder(orderPatch)).build();
 
         } catch (Exception ex) {
-            throw new ApplicationException(ex);
+            throw new ApplicationException(ex.getMessage());
         }
     }
 
@@ -68,7 +68,7 @@ public class OrderController {
             return Response.ok(service.getFilteredOrders(orderFilter)).build();
 
         } catch (Exception ex) {
-            throw new ApplicationException(ex);
+            throw new ApplicationException(ex.getMessage());
         }
     }
 
@@ -80,9 +80,7 @@ public class OrderController {
             return ok().build();
 
         } catch (Exception ex) {
-            throw new ApplicationException(ex);
+            throw new ApplicationException(ex.getMessage());
         }
     }
-
-    // TODO getOrderById
 }

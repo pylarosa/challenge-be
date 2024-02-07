@@ -53,11 +53,13 @@ public class ProductController {
         }
     }
 
+    // Method not called by FE
     @DELETE
     public Response deleteAll() throws ApplicationException {
         try {
             service.deleteAll();
-            return ok().build();
+            return ok(null).build();
+
         } catch (ServiceException ex) {
             throw new ApplicationException(ex.getMessage());
         }

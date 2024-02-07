@@ -7,7 +7,6 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum Status {
     PRESO_IN_CARICO("PRESO IN CARICO"),
-    PARTITO("PARTITO"),
     IN_CONSEGNA("IN CONSEGNA"),
     CONSEGNATO("CONSEGNATO"),
     DESTINATARIO_NON_TROVATO("DESTINATARIO NON TROVATO"),
@@ -15,7 +14,6 @@ public enum Status {
     RISPEDITO_AL_MITTENTE("RISPEDITO AL MITTENTE");
 
     private final String descrizione;
-
 
     public static Status fromDescrizione(String descrizione) {
         for (Status status : Status.values()) {
